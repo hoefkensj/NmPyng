@@ -1,6 +1,6 @@
 #!/usr/bin/python
 from conn import conn_findname,conn_next,conn_up,conn_dn
-from ping import ping_ping,ping_http
+from ping import ping_http
 from logg import logg,logg_time,logg_date
 from collections import deque
 import sys,time
@@ -9,48 +9,58 @@ conns=[]
 c_up =[]
 c_dn =[]
 limit=100
+q = deque()
 
 def pyng(host):
 	stat=ping_http(host)
-	if stat== -1:
-		logg(f'\t-\tNO Connection ...')
-		conn_next(span)
+	if stat is None:
+		logg(f'\t-\tNO Connection ...\n')
+		connext()
 		return
 	else:
 		logg(f'\t-\tConnected \n')
 
 def ppl_q(match):
-	global conns, c_up, c_dn
+	global conns, c_up, c_dn, q
 	conns=conn_findname(match)
 	for conn in conns:
 		if conn[3]!='':
 			c_up.append(conn)
 		else:
 			c_dn.append(conn)
+			q.append(conn[1])
 
+def connext():
+	global q,c_up
+	active=conn_up(q.popleft())
+	if c_up[0]:
+		print(c_up[0])
+		killed=conn_dn(c_up[0])
+	return active
 
 def main():
-	global conns,c_up,c_dn,limit
+	global conns,c_up,c_dn,limit,q
 	count=0
 	logg(f'{logg_date()}\n')
-	ppl_q('Telenet')
-	if c_up != []:
-		while True:
-			logg(logg_time())
-			pyng('http://ftp.belnet.be')
-			time.sleep(10)
-	if c_up == []:
-		p=conn_up(c_dn[0][1])
-		
-		while stat is not None:
-			stat=p.poll()
-			time.sleep(0.1)
-			count += 1
-			if count == limit:
-				break
-			
-
-			
+	while True:
+		ppl_q('Telenet')
+		if c_up != []:
+			logg(f'Connected to {c_up[0][0]} with {c_up[0][3]}: \n')
+			while True:
+				logg(logg_time())
+				pyng('http://ftp.belnet.be')
+				time.sleep(5)
+		if c_up == []:
+			p=connext()
+			while p.poll() is not None:
+				time.sleep(0.1)
+				count += 1
+				print(count)
+				if count == limit:
+					break
+				
+	
+				
 
 				
 		

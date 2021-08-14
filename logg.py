@@ -1,3 +1,4 @@
+#!/usr/bin/python
 import time,datetime,sys
 debug=True
 
@@ -14,3 +15,9 @@ def logg_time():
 def logg_date():
 	today=str(datetime.datetime.now()).split()[0]
 	return today
+
+def main():
+	pass
+
+if __name__ == '__main__':
+	main()
