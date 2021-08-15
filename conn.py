@@ -2,9 +2,20 @@
 import subprocess,shlex,time,sys
 from collections import deque
 from logg import logg
+from ping import ping_http
 
 def run(*a):
 	return subprocess.Popen(*a, stdout=subprocess.PIPE, universal_newlines=True)
+
+def conn_check():
+	ping_http(host)
+	if stat is None:
+		logg(f'\t-\tNO Connection ...\n')
+		connext()
+		return
+	else:
+		logg(f'\t-\tConnected \n')
+
 
 def conn_get():
 	lns=[]
@@ -28,6 +39,7 @@ def conn_findname(name):
 			matches.append(conns[con])
 	return matches
 	
+
 def conn_up(UUID):
 	return  run (('nmcli','c','up', UUID))
 def conn_dn(UUID):
@@ -36,6 +48,10 @@ def conn_next():
 	#get active connections, if no active start first
 	pass
 	
+
+
+
+
 def main():
 	telenet=conn_findname('Telenet')
 	print(telenet)

@@ -2,11 +2,11 @@
 import time,datetime,sys
 debug=True
 
-def logg(entry):
+def logg(*a):
 	if debug == True:
-		sys.stdout.write(entry)
+		sys.stdout.write(" ".join(a))
 	with open(f'pong.log' , 'a') as file:
-		file.write(entry)
+		file.write(" ".join(a))
 
 def logg_time():
 	now = str(datetime.datetime.now()).split()[1].split('.')[0]

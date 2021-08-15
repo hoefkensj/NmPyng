@@ -48,7 +48,7 @@ def main():
 			logg(f'Connected to {c_up[0][0]} with {c_up[0][3]}: \n')
 			while True:
 				logg(logg_time())
-				pyng('http://ftp.belnet.be')
+				pyng('http://ftp.belnet.be') #http://193.190.198.27'
 				time.sleep(5)
 		if c_up == []:
 			p=connext()
