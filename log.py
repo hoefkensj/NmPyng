@@ -8,16 +8,17 @@ def logg(*a):
 	with open(f'pong.log' , 'a') as file:
 		file.write(" ".join(a))
 
-def logg_time():
+def tme():
 	now = str(datetime.datetime.now()).split()[1].split('.')[0]
 	return now
 	
-def logg_date():
+def dte():
 	today=str(datetime.datetime.now()).split()[0]
 	return today
 
-def main():
-	pass
+
+def main(*a):
+	logg(a)
 
 if __name__ == '__main__':
-	main()
+	main(sys.argv)

@@ -1,7 +1,6 @@
 #!/usr/bin/python
-from conn import conn_findname,conn_next,conn_up,conn_dn
-from ping import ping_http
-from logg import logg,logg_time,logg_date
+import con,ping
+import log
 from collections import deque
 import sys,time
 
@@ -11,8 +10,8 @@ c_dn =[]
 limit=100
 q = deque()
 
-def pyng(host):
-	stat=ping_http(host)
+def eval_pyng(host):
+	
 	if stat is None:
 		logg(f'\t-\tNO Connection ...\n')
 		connext()
@@ -38,19 +37,33 @@ def connext():
 		killed=conn_dn(c_up[0])
 	return active
 
+
+def mkvars():
+	varlist,conns, c_up, c_dn,limit,q=[]
+	varlist+=[conns, c_up, c_dn,limit,q]
+	return varlist
+
+
+def setvars(v):
+	v['limit']	= 100
+	v['q'] = deque()
+	return v
+	
 def main():
+	vars = mkvars()
+	data= setvars(vars)
 	global conns,c_up,c_dn,limit,q
 	count=0
-	logg(f'{logg_date()}\n')
+	log.logg(f'{log.dte()}\n')
 	while True:
 		ppl_q('Telenet')
-		if c_up != []:
-			logg(f'Connected to {c_up[0][0]} with {c_up[0][3]}: \n')
+		if c_up[0]:
+			log.logg(f'Connected to {c_up[0][0]} with {c_up[0][3]}: \n')
 			while True:
-				logg(logg_time())
-				pyng('http://ftp.belnet.be') #http://193.190.198.27'
+				log.logg(log.time())
+				ping.http('http://ftp.belnet.be') #http://193.190.198.27'
 				time.sleep(5)
-		if c_up == []:
+		if not c_up[0]:
 			p=connext()
 			while p.poll() is not None:
 				time.sleep(0.1)
